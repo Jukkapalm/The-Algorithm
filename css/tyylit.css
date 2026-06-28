@@ -20,11 +20,21 @@ body {
     font-family: 'Creepster', cursive;
     font-size: clamp(3rem, 10vw, 7rem);
     letter-spacing: 0.1em;
+    animation: fadeIn 10s ease forwards;
 }
 
 .subtitle {
     font-size: clamp(1.1rem, 2.2vw, 1.3rem);
     letter-spacing: 0.2em;
+    opacity: 0;
+    animation: showUp 0s ease forwards;
+    animation-delay: 5s;
+}
+
+.row {
+    opacity: 0;
+    animation: showUp 0s ease forwards;
+    animation-delay: 7.5s;
 }
 
 .algorithm-card {
@@ -36,8 +46,9 @@ body {
 }
 
 .algorithm-card:hover {
-    border-color: #CC0000;
+    border: none;
     box-shadow: 0 0 20px #CC0000, 0 0 40px #CC0000;
+    animation: flicker 0.4s ease forwards;
 }
 
 .card-title {
@@ -74,4 +85,24 @@ body {
     color: #CC0000;
     letter-spacing: 0.15em;
     margin-top: 3rem;
+    opacity: 0;
+    animation: showUp 0s ease forwards;
+    animation-delay: 10s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes showUp {
+    to { opacity: 1; }
+}
+
+@keyframes flicker {
+    0%   { opacity: 1; }
+    25%  { opacity: 0; }
+    50%  { opacity: 1; }
+    75%  { opacity: 0; }
+    100% { opacity: 1; }
 }
