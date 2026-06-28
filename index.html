@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <!-- Meta tiedot -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="The Algorithm - Visualisoi BFS ja DFS polunetsintäalgoritmit leikkimielisessä kauhuteemaisessa kokemuksessa">
+        <title>The Algorithm</title>
+
+        <!-- Fontit -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+
+        <!-- Oma CSS -->
+        <link rel="stylesheet" href="css/tyylit.css">
+    </head>
+    <body>
+
+        <!-- Pääsisältö main menu -->
+        <main id="view-selection">
+
+            <div class="container d-flex flex-column justify-content-center align-items-center py-5">
+                <div class="text-center mb-5">
+                    <h1 class="main-title">The Algorithm</h1>
+                    <p class="subtitle">Choose your fate</p>
+                </div>
+
+                <div class="row g-5 justify-content-center">
+
+                    <!-- BFS kortti -->
+                    <div class="col-12 col-md-5 d-flex">
+                        <div class="algorithm-card text-center">
+                            <h2 class="card-title">BFS</h2>
+                            <p class="card-description">
+                                Se etsii sinut järjestelmällisesti. Et voi piiloutua, et pääse pakoon.
+                            </p>
+                            <button class="btn-horror" onclick="startGame('bfs')">
+                                Play BFS
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- DFS kortti -->
+                    <div class="col-12 col-md-5 d-flex">
+                        <div class="algorithm-card text-center">
+                            <h2 class="card-title">DFS</h2>
+                            <p class="card-description">
+                                Se vaeltaa pimeydessä arvaamattomasti. Et tiedä mistä se tulee, mutta se tulee.
+                            </p>
+                            <button class="btn-horror" onclick="startGame('dfs')">
+                                Play DFS
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alatunniste -->
+                <p class="footer-text">Breadth First Search vs Depth First Search</p>
+            </div>
+
+        </main>
+
+        <!-- Bootsrap JS -->
+        <script src="js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
