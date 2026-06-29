@@ -87,6 +87,10 @@ body {
     color: #000;
 }
 
+.speed-label {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+}
+
 .footer-text {
     font-size: clamp(0.7rem, 1.2vw, 0.85rem);
     color: #CC0000;
@@ -105,10 +109,6 @@ body {
     align-items: center;
 }
 
-.game-settings {
-    min-height: 90vh;
-}
-
 .game-title {
     font-family: 'Creepster', cursive;
 }
@@ -117,6 +117,16 @@ input[type="range"] {
     width: 100%;
     accent-color: #CC0000;
     cursor: pointer;
+}
+
+#game-canvas {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    display: block;
+}
+
+.game-instruction {
+    font-size: clamp(1rem, 2vw, 1.3rem);
 }
 
 @keyframes fadeIn {
