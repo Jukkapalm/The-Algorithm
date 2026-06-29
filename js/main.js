@@ -37,3 +37,22 @@ window.addEventListener('load', initGame);
 
 // Piirretään uudelleen kun ikkuna muuttuu
 window.addEventListener('resize', initGame);
+
+// Vaihdetaan näkymä alkuvalikon valitun pelin mukaan
+function startGame(algorithm) {
+    const selection = document.getElementById('view-selection');
+    const game = document.getElementById('view-game');
+
+    document.getElementById('game-title').textContent = algorithm.toUpperCase();
+
+    // Fade out alkuvalikko
+    selection.classList.add('fade-out');
+
+    setTimeout(() => {
+        selection.style.display = 'none';
+        selection.classList.remove('fade-out');
+        game.style.display = 'flex';
+        game.classList.add('fade-in');
+        initGame();
+    }, 2000);
+}
