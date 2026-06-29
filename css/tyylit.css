@@ -104,7 +104,7 @@ body {
 #view-game {
     width: 100%;
     min-height: 100vh;
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
 }
@@ -129,9 +129,27 @@ input[type="range"] {
     font-size: clamp(1rem, 2vw, 1.3rem);
 }
 
+.fade-out {
+    animation: fadeOut 2s ease forwards;
+}
+
+.fade-in {
+    animation: fadeInFast 2s ease forwards;
+}
+
+@keyframes fadeInFast {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
 }
 
 @keyframes showUp {
