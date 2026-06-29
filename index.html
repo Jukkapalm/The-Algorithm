@@ -25,16 +25,16 @@
         <!-- Pääsisältö main menu -->
         <main id="view-selection">
 
-            <!--<div class="container d-flex flex-column justify-content-center align-items-center py-5">
+            <div class="container d-flex flex-column justify-content-center align-items-center py-5">
                 <div class="text-center mb-5">
                     <h1 class="main-title">The Algorithm</h1>
                     <p class="subtitle">Choose your fate</p>
-                </div>-->
+                </div>
 
-                <!--<div class="row g-5 justify-content-center">-->
+                <div class="row g-5 justify-content-center">
 
                     <!-- BFS kortti -->
-                    <!--<div class="col-12 col-md-5 d-flex">
+                    <div class="col-12 col-md-5 d-flex">
                         <div class="algorithm-card text-center">
                             <h2 class="card-title">BFS</h2>
                             <p class="card-description">
@@ -44,10 +44,10 @@
                                 Play BFS
                             </button>
                         </div>
-                    </div>-->
+                    </div>
 
                     <!-- DFS kortti -->
-                    <!--<div class="col-12 col-md-5 d-flex">
+                    <div class="col-12 col-md-5 d-flex">
                         <div class="algorithm-card text-center">
                             <h2 class="card-title">DFS</h2>
                             <p class="card-description">
@@ -57,54 +57,12 @@
                                 Play DFS
                             </button>
                         </div>
-                    </div>-->
-                <!--</div>-->
-
-                <!-- Alatunniste -->
-                <!--<p class="footer-text">Breadth First Search vs Depth First Search</p>
-            </div>-->
-
-            <!-- Pelinäkymä - piilotettu oletuksena -->
-            <section id="view-game">
-
-                <div class="container d-flex flex-column align-items-center py-5">
-
-                    <!-- Otsikko ja takaisin button -->
-                    <div class="game-header text-center mb-4">
-                        <button class="btn-horror btn-back" onclick="showSelection()">← Takaisin</button>
-                        <h2 class="game-title" id="game-title">BFS</h2>
-                    </div>
-
-                    <!-- Ohjeteksti -->
-                    <p class="game-instruction" id="game-instruction">Aseta lähtöpiste</p>
-
-                    <!-- Kontrollit -->
-                    <div class="game-controls d-flex flex-wrap justify-content-center gap-3 mb-3">
-                        <button class="btn-horror btn-control active" id="btn-start-point" onclick="setMode('start')">Lähtöpiste</button>
-                        <button class="btn-horror btn-control" id="btn-end-point" onclick="setMode('end')">Maali</button>
-                        <button class="btn-horror btn-control" id="btn-wall" onclick="setMode('wall')">Seinä</button>
-                    </div>
-
-                    <!-- Nopeussäädin -->
-                    <div class="speed-control mb-3 text-center">
-                        <label class="speed-label" for="speed-slider">Nopeus</label>
-                        <input type="range" id="speed-slider" min="1" max="10" value="5">
-                    </div>
-
-                    <!-- Reset button -->
-                    <button class="btn-horror btn-reset mb-4" onclick="resetGame()">Tyhjennä</button>
-
-                    <!-- Canvas wrapper -->
-                    <div class="canvas-wrapper">
-
-                        <!-- Käynnistä button peli ruudukon päällä - poistuu näkymästä kun käynnistä buttonia painettu -->
-                        <button class="btn-horror btn-run" id="btn-run" onclick="startAlgorithm()">Käynnistä</button>
-
-                        <!-- Peliruudukko -->
-                        <canvas id="game-canvas"></canvas>
                     </div>
                 </div>
-            </section>
+
+                <!-- Alatunniste -->
+                <p class="footer-text">Breadth First Search vs Depth First Search</p>
+            </div>
 
         </main>
 
