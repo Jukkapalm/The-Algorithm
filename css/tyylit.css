@@ -12,12 +12,17 @@ body {
     background-color: #000;
     color: #CC0000;
     font-family: 'Roboto', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 /* Alku valikko */
+#view-selection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+}
+
 .main-title {
     font-family: 'Creepster', cursive;
     font-size: clamp(3rem, 10vw, 7rem);
@@ -33,7 +38,7 @@ body {
     animation-delay: 5s;
 }
 
-.row {
+.kortit {
     opacity: 0;
     animation: showUp 0s ease forwards;
     animation-delay: 7.5s;
@@ -90,6 +95,28 @@ body {
     opacity: 0;
     animation: showUp 0s ease forwards;
     animation-delay: 10s;
+}
+
+#view-game {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-settings {
+    min-height: 90vh;
+}
+
+.game-title {
+    font-family: 'Creepster', cursive;
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: #CC0000;
+    cursor: pointer;
 }
 
 @keyframes fadeIn {
