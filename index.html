@@ -23,7 +23,7 @@
     <body>
 
         <!-- Pääsisältö main menu -->
-        <main id="view-selection">
+        <main id="view-selection" style="display: none;">
 
             <div class="container d-flex flex-column justify-content-center align-items-center py-5">
                 <div class="text-center mb-5">
@@ -31,7 +31,7 @@
                     <p class="subtitle">Choose your fate</p>
                 </div>
 
-                <div class="row g-5 justify-content-center">
+                <div class="row kortit g-5 justify-content-center">
 
                     <!-- BFS kortti -->
                     <div class="col-12 col-md-5 d-flex">
@@ -65,6 +65,44 @@
             </div>
 
         </main>
+
+        <section id="view-game">
+            <div class="container game-settings py-5">
+
+                <!-- Otsikko -->
+                <div class="text-center mb-4">
+                    <h1 class="game-title" id="game-title">BFS</h1>
+                </div>
+
+                <!-- Ohjeteksti -->
+                <p class="game-instruction text-center" id="game-instruction">Aseta lähtöpiste</p>
+
+                <!-- Canvas vasemmalla, kontrollit oikealla -->
+                <div class="row g-4 mt-5">
+
+                    <!-- Canvas -->
+                    <div class="col-12 col-md-6 col-xl-8">
+                        <canvas id="game-canvas"></canvas>
+                    </div>
+
+                    <!-- Kontrollit -->
+                    <div class="col-12 col-md-3 col-xl-2 d-flex flex-column gap-3">
+                        <button class="btn-horror btn-control active" id="btn-start-point" onclick="setMode('start')">Lähtöpiste</button>
+                        <button class="btn-horror btn-control" id="btn-end-point" onclick="setMode('end')">Maali</button>
+                        <button class="btn-horror btn-control" id="btn-wall" onclick="setMode('wall')">Seinä</button>
+                        <label class="speed-label" for="speed-slider">Nopeus</label>
+                        <input type="range" id="speed-slider" min="1" max="10" value="5">
+                    </div>
+                    <div class="col-12 col-md-3 col-xl-2 d-flex flex-column gap-3">
+                        <button class="btn-horror" onclick="resetGame()">Tyhjennä</button>
+                        <button class="btn-horror" id="btn-run" onclick="startAlgorithm()">Käynnistä</button>
+                        <button class="btn-horror btn-back" onclick="showSelection()">Menu</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
 
         <!-- Bootsrap JS -->
         <script src="js/bootstrap.bundle.min.js"></script>
