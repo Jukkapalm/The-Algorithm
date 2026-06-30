@@ -115,3 +115,19 @@ function showSelection() {
         selection.classList.add('fade-in');
     }, 2000);
 }
+
+// Kuuntelija soluille
+canvas.addEventListener('click', function(event) {
+
+    // Selvitetään mitä solua klikattiin canvasin sisällä
+    const rect = canvas.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const clickY = event.clientY - rect.top;
+
+    // Muutetaan pikselikordinaatit ruudukon rivi/sarake indeksiksi
+    const cellSize = canvas.width / GRID_SIZE;
+    const col = Math.floor(clickX / cellSize);
+    const row = Math.floor(clickY / cellSize);
+
+    console.log('Klikattu solu - rivi:', row, 'sarake:', col);
+});
