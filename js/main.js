@@ -13,6 +13,13 @@ let grid = [];
 // Pelinäkymän buttoneiden tila
 let currentMode = 'start';
 
+// Ladataan spritet etukäteen jotta ne ovat valmiina kun canvas piirtää
+const startSprite = new Image();
+startSprite.src = '../images/monsteri.png'; // Monsteri-sprite
+
+const endSprite = new Image();
+endSprite.src = '../images/pelaaja.png'; // Maali-sprite
+
 // Luodaan tyhjä ruudukko, jossa jokainen solu on aina alussa 'empty'
 function createEmptyGrid() {
     const newGrid = [];
@@ -54,10 +61,14 @@ function drawGrid() {
             // Valitaan solun väri sen tilan mukaan (grid[row][col]).
             switch (grid[row][col]) {
                 case 'start':
-                    ctx.fillStyle = '#00FF00';
+                    ctx.fillStyle = '#0A0A0A';
+                    ctx.fillRect(x, y, cellSize, cellSize);
+                    ctx.drawImage(startSprite, x, y, cellSize, cellSize);
                     break;
                 case 'end':
-                    ctx.fillStyle = '#0000FF';
+                    ctx.fillStyle = '#0A0A0A';
+                    ctx.fillRect(x, y, cellSize, cellSize);
+                    ctx.drawImage(endSprite, x, y, cellSize, cellSize);
                     break;
                 case 'wall':
                     ctx.fillStyle = '#333333';
@@ -71,8 +82,6 @@ function drawGrid() {
                 default:
                     ctx.fillStyle = '#0A0A0A';
             }
-
-            ctx.fillRect(x, y, cellSize, cellSize);
 
             // Ruudukon viivat
             ctx.strokeStyle = '#1a0000';
