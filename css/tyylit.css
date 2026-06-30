@@ -137,6 +137,11 @@ input[type="range"] {
     animation: fadeInFast 2s ease forwards;
 }
 
+.btn-control.active {
+    background-color: #CC0000;
+    color: #000;
+}
+
 @keyframes fadeInFast {
     from { opacity: 0; }
     to { opacity: 1; }
