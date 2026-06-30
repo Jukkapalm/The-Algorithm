@@ -158,6 +158,7 @@ canvas.addEventListener('click', function(event) {
         // Asetetaan uusi lähtöpiste
         grid[row][col] = 'start';
         drawGrid();
+        updateRunButton();
     }
 
     // Maalin asetus
@@ -180,6 +181,7 @@ canvas.addEventListener('click', function(event) {
         // Asetetaan uusi maali
         grid[row][col] = 'end';
         drawGrid();
+        updateRunButton();
     }
 
     // Seinän asetus
@@ -198,6 +200,7 @@ canvas.addEventListener('click', function(event) {
         }
 
         drawGrid();
+        updateRunButton();
     }
 });
 
@@ -205,6 +208,7 @@ canvas.addEventListener('click', function(event) {
 function resetGame() {
     grid = createEmptyGrid();
     drawGrid();
+    updateRunButton();
 }
 
 // Vaihdetaan active tilaa sen mukaan mitä buttonia painettu pelinäkymässä
@@ -226,4 +230,21 @@ function setMode(mode) {
     if (mode === 'start') instruction.textContent = 'Aseta lähtöpiste';
     if (mode === 'end') instruction.textContent = 'Aseta maali';
     if (mode === 'wall') instruction.textContent = 'Aseta seinät (valinnainen)';
+}
+
+// Käynnistä buttonin disabled tila
+// Tarkistetaan onko lähtöpiste ja maali asetettu
+function updateRunButton() {
+    let hasStart = false;
+    let hasEnd = false;
+
+    for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+            if (grid[r][c] === 'start') hasStart = true;
+            if (grid[r][c] === 'end') hasEnd = true;
+        }
+    }
+
+    const btnRun = document.getElementById('btn-run');
+    btnRun.disabled = !(hasStart && hasEnd);
 }
