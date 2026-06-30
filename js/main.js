@@ -45,14 +45,32 @@ function startGame(algorithm) {
 
     document.getElementById('game-title').textContent = algorithm.toUpperCase();
 
-    // Fade out alkuvalikko
+    selection.classList.remove('fade-in');
     selection.classList.add('fade-out');
 
     setTimeout(() => {
         selection.style.display = 'none';
         selection.classList.remove('fade-out');
+
         game.style.display = 'flex';
         game.classList.add('fade-in');
         initGame();
+    }, 2000);
+}
+
+function showSelection() {
+    const selection = document.getElementById('view-selection');
+    const game = document.getElementById('view-game');
+
+    game.classList.remove('fade-in');
+    game.classList.add('fade-out');
+
+    setTimeout(() => {
+        game.style.display = 'none';
+        game.classList.remove('fade-out');
+
+        selection.style.display = 'flex';
+        selection.classList.remove('fade-in');
+        selection.classList.add('fade-in');
     }, 2000);
 }
