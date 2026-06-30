@@ -10,6 +10,9 @@ const GRID_SIZE = 10;
 // jolloin ruudukon tilaa voi muokata ja sen mukaan vain piirtää uudelleen
 let grid = [];
 
+// Pelinäkymän buttoneiden tila
+let currentMode = 'start';
+
 // Luodaan tyhjä ruudukko, jossa jokainen solu on aina alussa 'empty'
 function createEmptyGrid() {
     const newGrid = [];
@@ -50,6 +53,12 @@ function drawGrid() {
 
             // Valitaan solun väri sen tilan mukaan (grid[row][col]).
             switch (grid[row][col]) {
+                case 'start':
+                    ctx.fillStyle = '#00FF00';
+                    break;
+                case 'end':
+                    ctx.fillStyle = '#0000FF';
+                    break;
                 case 'wall':
                     ctx.fillStyle = '#333333';
                     break;
@@ -129,5 +138,92 @@ canvas.addEventListener('click', function(event) {
     const col = Math.floor(clickX / cellSize);
     const row = Math.floor(clickY / cellSize);
 
-    console.log('Klikattu solu - rivi:', row, 'sarake:', col);
+    // Lähtopisteen asetus
+    if (currentMode === 'start') {
+
+        // Estetään ettei voi lähtöpistettä asettaa maalin päälle
+        if (grid[row][col] === 'end') {
+            return;
+        }
+
+        // Poistetaan vanha lähtöpiste ensin (vain yksi kerrallaan)
+        for (let r = 0; r < GRID_SIZE; r++) {
+            for (let c = 0; c < GRID_SIZE; c++) {
+                if (grid[r][c] === 'start') {
+                    grid[r][c] = 'empty';
+                }
+            }
+        }
+
+        // Asetetaan uusi lähtöpiste
+        grid[row][col] = 'start';
+        drawGrid();
+    }
+
+    // Maalin asetus
+    if (currentMode === 'end') {
+
+        // Estetään ettei voi maalia asettaa lähtöpisteen päälle
+        if (grid[row][col] === 'start') {
+            return;
+        }
+
+        // Poistetaan vanha maali ensin (vain yksi kerrallaan)
+        for (let r = 0; r < GRID_SIZE; r++) {
+            for (let c = 0; c < GRID_SIZE; c++) {
+                if (grid[r][c] === 'end') {
+                    grid[r][c] = 'empty';
+                }
+            }
+        }
+
+        // Asetetaan uusi maali
+        grid[row][col] = 'end';
+        drawGrid();
+    }
+
+    // Seinän asetus
+    if (currentMode === 'wall') {
+
+        // Estetään ettei voi seinää asettaa lähtöpisteen tai maalin päälle
+        if (grid[row][col] === 'start' || grid[row][col] === 'end') {
+            return;
+        }
+
+        // Toggle - jos solu on jo seinä, poistetaan se, muuten lisätään
+        if (grid[row][col] === 'wall') {
+            grid[row][col] = 'empty';
+        } else {
+            grid[row][col] = 'wall';
+        }
+
+        drawGrid();
+    }
 });
+
+// Tyhjennetään ruudukko tyhjennä buttonilla - kaikki solut takaisin 'empty' tilaan
+function resetGame() {
+    grid = createEmptyGrid();
+    drawGrid();
+}
+
+// Vaihdetaan active tilaa sen mukaan mitä buttonia painettu pelinäkymässä
+function setMode(mode) {
+    currentMode = mode;
+
+    // Poistetaan active kaikilta kontrolli buttoneilta
+    document.getElementById('btn-start-point').classList.remove('active');
+    document.getElementById('btn-end-point').classList.remove('active');
+    document.getElementById('btn-wall').classList.remove('active');
+
+    // Lisätään active valitulle napille
+    if (mode === 'start') document.getElementById('btn-start-point').classList.add('active');
+    if (mode === 'end') document.getElementById('btn-end-point').classList.add('active');
+    if (mode === 'wall') document.getElementById('btn-wall').classList.add('active');
+
+    // Päivitetään ohjeteksti tilan mukaan
+    const instruction = document.getElementById('game-instruction');
+    if (mode === 'start') instruction.textContent = 'Aseta lähtöpiste';
+    if (mode === 'end') instruction.textContent = 'Aseta maali';
+    if (mode === 'wall') instruction.textContent = 'Aseta seinät (valinnainen)';
+}
