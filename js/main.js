@@ -152,6 +152,7 @@ canvas.addEventListener('click', function(event) {
 
         // Estetään ettei voi lähtöpistettä asettaa maalin päälle
         if (grid[row][col] === 'end') {
+            flashCell(row, col);
             return;
         }
 
@@ -175,6 +176,7 @@ canvas.addEventListener('click', function(event) {
 
         // Estetään ettei voi maalia asettaa lähtöpisteen päälle
         if (grid[row][col] === 'start') {
+            flashCell(row, col);
             return;
         }
 
@@ -198,6 +200,7 @@ canvas.addEventListener('click', function(event) {
 
         // Estetään ettei voi seinää asettaa lähtöpisteen tai maalin päälle
         if (grid[row][col] === 'start' || grid[row][col] === 'end') {
+            flashCell(row, col);
             return;
         }
 
@@ -256,4 +259,32 @@ function updateRunButton() {
 
     const btnRun = document.getElementById('btn-run');
     btnRun.disabled = !(hasStart && hasEnd);
+}
+
+// Solu vilkkuu jos yritetään asettaa päällekkäin lähtöpiste ja maali
+function flashCell(row, col) {
+    const cellSize = canvas.width / GRID_SIZE;
+    const x = col * cellSize;
+    const y = row * cellSize;
+
+    let count = 0;
+    const maxFlashes = 3;
+
+    const interval = setInterval(() => {
+
+        // Vilkku päälle - punainen
+        ctx.fillStyle = '#FF0000';
+        ctx.fillRect(x, y, cellSize, cellSize);
+
+        setTimeout(() => {
+
+            // Vilkku pois - piirretään solu normaalisti takaisin
+            drawGrid();
+        }, 150);
+
+        count++;
+        if (count >= maxFlashes) {
+            clearInterval(interval);
+        }
+    }, 300);
 }
