@@ -72,15 +72,19 @@ function drawGrid() {
                     break;
                 case 'wall':
                     ctx.fillStyle = '#333333';
+                    ctx.fillRect(x, y, cellSize, cellSize);
                     break;
                 case 'visited':
                     ctx.fillStyle = '#660000';
+                    ctx.fillRect(x, y, cellSize, cellSize);
                     break;
                 case 'path':
                     ctx.fillStyle = '#FF8C00';
+                    ctx.fillRect(x, y, cellSize, cellSize);
                     break;
                 default:
                     ctx.fillStyle = '#0A0A0A';
+                    ctx.fillRect(x, y, cellSize, cellSize);
             }
 
             // Ruudukon viivat
@@ -287,4 +291,184 @@ function flashCell(row, col) {
             clearInterval(interval);
         }
     }, 300);
+}
+
+// BFS algoritmi - laskee kaikki askeleet valmiiksi listaan animointia varten
+function bfs(startRow, startCol) {
+
+    // Jono johon lisätään solut käsiteltäväksi
+    const queue = [];
+
+    // Lista kaikista askeleista animointia varten
+    const steps = [];
+
+    // Muistirakenne mistä soluun tultiin, jotta voidaan piirtää polku
+    // Avain on 'rivi, sarake' merkkijono, arvo on edellinen solu
+    const cameFrom = {};
+
+    // Aloitetaan lähtöpisteestä
+    queue.push({ row: startRow, col: startCol});
+    cameFrom[`${startRow},${startCol}`] = null;
+
+    // Käydään soluja läpi kunnes jono on tyhjä tai maali löytyi
+    while (queue.length > 0) {
+
+        // Otetaan jonon ensimmäinen solu käsittelyyn
+        const current = queue.shift();
+        const { row, col } = current;
+
+        // Jos löydettiin maali, lopetetaan
+        if (grid[row][col] === 'end') {
+
+            // Rakennetaan path takaperin cameFrom rakenteen avulla
+            const path = [];
+            let key = `${row},${col}`;
+
+            while (cameFrom[key] !== null) {
+                const prev = cameFrom[key];
+                path.unshift({ row: prev.row, col: prev.col });
+                key = `${prev.row},${prev.col}`;
+            }
+
+            return { steps, path, found: true };
+        }
+
+        // Käydään läpi naapurisolut (ylös, alas, vasen, oikea)
+        const neighbors = [
+            { row: row - 1, col: col },
+            { row: row + 1, col: col },
+            { row: row, col: col - 1 },
+            { row: row, col: col + 1 }
+        ];
+
+        for (const neighbor of neighbors) {
+            const key = `${neighbor.row},${neighbor.col}`;
+
+            // Tarkistetaan että solu on ruudukon sisällä
+            const inBounds = neighbor.row >= 0 && neighbor.row < GRID_SIZE && neighbor.col >= 0 && neighbor.col < GRID_SIZE;
+
+            // Lisätään jonoon jos solu on käymätön eikä ole seinä
+            if (inBounds && !(key in cameFrom) && grid[neighbor.row][neighbor.col] !== 'wall') {
+                queue.push(neighbor);
+                cameFrom[key] = current;
+
+                // Tallennetaan askel animaatiota varten (ei tallenneta start/end soluja)
+                if (grid[neighbor.row][neighbor.col] === 'empty') {
+                    steps.push({ row: neighbor.row, col: neighbor.col });
+                }
+            }
+        }
+    }
+
+    // Jono tyhjeni ilman että maali löytyi
+    return { steps, path: [], found: false };
+}
+
+// Animoi BFS askel kerrallaan käyttäen steps-listaa
+function animateBFS(steps, path) {
+
+    // Lasketaan viive nopeussäätimen arvosta
+    // Arvo 1 = hidas (500ms), arvo 10 = nopea (50ms)
+    const speed = document.getElementById('speed-slider').value;
+    const delay = 550 - (speed * 50);
+
+    let stepIndex = 0;
+
+    // Käydään steps-lista läpi askel kerrallaan
+    function nextStep() {
+        if (stepIndex >= steps.length) {
+            // Kaikki askeleet animoitu, piirretään path
+            animatePath(path);
+            return;
+        }
+
+        const { row, col } = steps[stepIndex];
+
+        // Merkitään solu vierailluksi
+        grid[row][col] = 'visited';
+        drawGrid();
+
+        stepIndex++;
+        setTimeout(nextStep, delay);
+    }
+
+    nextStep();
+}
+
+// Animoidaan löydetty path askel kerrallaan
+function animatePath(path) {
+    const speed = document.getElementById('speed-slider').value;
+    const delay = 550 - (speed * 50);
+
+    let pathIndex = 0;
+
+    function nextPathStep() {
+        if (pathIndex >= path.length) {
+
+            // Path animoitu, vapautetaan napit
+            unlockButtons();
+            return;
+        }
+
+        const { row, col } = path[pathIndex];
+
+        // Merkitään solu pathiksi
+        grid[row][col] = 'path';
+        drawGrid();
+
+        pathIndex++;
+        setTimeout(nextPathStep, delay);
+    }
+
+    nextPathStep();
+}
+
+// Lukitaan napit algoritmin ajon ajaksi
+function lockButtons() {
+    document.getElementById('btn-start-point').disabled = true;
+    document.getElementById('btn-end-point').disabled = true;
+    document.getElementById('btn-wall').disabled = true;
+    document.getElementById('btn-run').disabled = true;
+    document.getElementById('btn-back').disabled = true;
+}
+
+// Vapautetaan napit algoritmin ajon jälkeen
+function unlockButtons() {
+    document.getElementById('btn-start-point').disabled = false;
+    document.getElementById('btn-end-point').disabled = false;
+    document.getElementById('btn-wall').disabled = false;
+    document.getElementById('btn-run').disabled = false;
+    document.getElementById('btn-back').disabled = false;
+}
+
+// Käynnistetään valittu algoritmi
+function startAlgorithm() {
+
+    // Etsitään lähtöpisteen sijainti gridistä
+    let startRow = -1;
+    let startCol = -1;
+
+    for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+            if (grid[r][c] === 'start') {
+                startRow = r;
+                startCol = c;
+            }
+        }
+    }
+
+    // Lukitaan napit ajon ajaksi
+    lockButtons();
+
+    // Käynnistetään BFS ja animaatio
+    const result = bfs(startRow, startCol);
+
+    if (result.found) {
+        animateBFS(result.steps, result.path);
+    } else {
+
+        // Maalia ei löydetty - animoidaan visited solut ja ilmoitetaan käyttäjälle
+        animateBFS(result.steps, []);
+        // Tähän tulee myöhemmin ilmoitus 
+    }
 }
