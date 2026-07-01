@@ -20,6 +20,9 @@ startSprite.src = '../images/monsteri.png'; // Monsteri-sprite
 const endSprite = new Image();
 endSprite.src = '../images/pelaaja.png'; // Maali-sprite
 
+// Muistaa kumpi algoritmi valittiin alkuvalikosta
+let currentAlgorithm = 'bfs';
+
 // Luodaan tyhjä ruudukko, jossa jokainen solu on aina alussa 'empty'
 function createEmptyGrid() {
     const newGrid = [];
@@ -105,6 +108,9 @@ window.addEventListener('resize', initGame);
 function startGame(algorithm) {
     const selection = document.getElementById('view-selection');
     const game = document.getElementById('view-game');
+
+    // Tallennetaan valittu algoritmi
+    currentAlgorithm = algorithm;
 
     document.getElementById('game-title').textContent = algorithm.toUpperCase();
 
@@ -377,6 +383,7 @@ function animateBFS(steps, path) {
     // Käydään steps-lista läpi askel kerrallaan
     function nextStep() {
         if (stepIndex >= steps.length) {
+
             // Kaikki askeleet animoitu, piirretään path
             animatePath(path);
             return;
@@ -384,8 +391,23 @@ function animateBFS(steps, path) {
 
         const { row, col } = steps[stepIndex];
 
-        // Merkitään solu vierailluksi
-        grid[row][col] = 'visited';
+        // Merkitään edellinen monsteri-solu visited-tilaan
+        if (stepIndex > 0) {
+            const prev = steps[stepIndex - 1];
+            grid[prev.row][prev.col] = 'visited';
+        } else {
+            // Ensimmäinen askel - merkitään lähtöpiste visited-tilaan
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    if (grid[r][c] === 'start') {
+                        grid[r][c] = 'visited';
+                    }
+                }
+            }
+        }
+
+        // Siirretään monsteri uuteen soluun
+        grid[row][col] = 'start';
         drawGrid();
 
         stepIndex++;
@@ -460,8 +482,8 @@ function startAlgorithm() {
     // Lukitaan napit ajon ajaksi
     lockButtons();
 
-    // Käynnistetään BFS ja animaatio
-    const result = bfs(startRow, startCol);
+    // Valitaan algoritmi sen mukaan kumpi valittiin alkuvalikosta
+    const result = currentAlgorithm === 'bfs' ? bfs(startRow, startCol) : dfs(startRow, startCol);
 
     if (result.found) {
         animateBFS(result.steps, result.path);
@@ -471,4 +493,75 @@ function startAlgorithm() {
         animateBFS(result.steps, []);
         // Tähän tulee myöhemmin ilmoitus 
     }
+}
+
+// DFS algoritmi - toiminta sama idea kuin BFS mutta käyttää pinoa jonon sijaan
+// Tämä tekee etsinnästä syvyyssuuntaisen leveyssuuntaisen sijaan
+function dfs(startRow, startCol) {
+
+    // Pino johon lisätään solut käsiteltäväksi
+    const stack = [];
+
+    // Lista kaikista askeleista animaatiota varten
+    const steps = [];
+
+    // Muistirakenne mistä soluun tultiin, jotta voidaan piirtää polku
+    const cameFrom = {};
+
+    // Aloitetaan lähtöpisteestä
+    stack.push({ row: startRow, col: startCol });
+    cameFrom[`${startRow},${startCol}`] = null;
+
+    // Käydään soluja läpi kunnes pino on tyhjä tai maali löytyy
+    while (stack.length > 0) {
+
+        // Otetaan pinon päällimmäinen solu käsittelyyn
+        const current = stack.pop();
+        const { row, col } = current;
+
+        // Jos löydettiin maali, lopetetaan
+        if (grid[row][col] === 'end') {
+
+            // Rakennetaan path taaksepäin cameFrom-rakenteen avulla
+            const path = [];
+            let key = `${row},${col}`;
+
+            while (cameFrom[key] !== null) {
+                const prev = cameFrom[key];
+                path.unshift({ row: prev.row, col: prev.col });
+                key = `${prev.row},${prev.col}`;
+            }
+
+            return { steps, path, found: true };
+        }
+
+        // Tallennetaan askel animaatiota varten (ei tallenneta start/end soluja)
+        if (grid[row][col] === 'empty') {
+            steps.push({ row, col });
+        }
+
+        // Käydään läpi naapurisolut (ylös, alas, vasen, oikea)
+        const neighbors = [
+            { row: row - 1, col: col },
+            { row: row + 1, col: col },
+            { row: row, col: col - 1 },
+            { row: row, col: col + 1 }
+        ];
+
+        for (const neighbor of neighbors) {
+            const key = `${neighbor.row},${neighbor.col}`;
+
+            // Tarkistetaan että solu on ruudukon sisällä
+            const inBounds = neighbor.row >= 0 && neighbor.row < GRID_SIZE && neighbor.col >= 0 && neighbor.col < GRID_SIZE;
+
+            // Lisätään pinoon jos solu on käymätön eikä ole seinä
+            if (inBounds && !(key in cameFrom) && grid[neighbor.row][neighbor.col] !== 'wall') {
+                stack.push(neighbor);
+                cameFrom[key] = current;
+            }
+        }
+    }
+
+    // Pino tyhjeni ilman että maali löytyi
+    return { steps, path: [], found: false };
 }
