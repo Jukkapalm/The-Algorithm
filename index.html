@@ -84,19 +84,19 @@
 
                     <!-- Ohjeteksti kontrollien päällä -->
                     <div class="col-12 col-md-6 text-center">
-                        <p class="game-instruction mb-5" id="game-instruction">Aseta lähtöpiste</p>
+                        <p class="game-instruction mb-5" id="game-instruction">Aseta Vainoajan lähtöpiste</p>
 
                         <!-- Kontrollit -->
                          <div class="row">
                             <div class="col-md-6 d-flex flex-column gap-3 mb-4">
-                                <button class="btn-horror btn-control active" id="btn-start-point" onclick="setMode('start')">Lähtöpiste</button>
-                                <button class="btn-horror btn-control" id="btn-end-point" onclick="setMode('end')">Maali</button>
-                                <button class="btn-horror btn-control" id="btn-wall" onclick="setMode('wall')">Seinä</button>
+                                <button class="btn-horror btn-control active" id="btn-start-point" onclick="setMode('start')">Vainoaja</button>
+                                <button class="btn-horror btn-control" id="btn-end-point" onclick="setMode('end')">Kohde</button>
+                                <button class="btn-horror btn-control" id="btn-wall" onclick="setMode('wall')">Esteet</button>
                                 <label class="speed-label" for="speed-slider">Nopeus</label>
                                 <input type="range" id="speed-slider" min="1" max="10" value="5">
                             </div>
                             <div class="col-md-6 d-flex flex-column gap-3">
-                                <button class="btn-horror" onclick="resetGame()">Tyhjennä</button>
+                                <button class="btn-horror" id="btn-reset" onclick="resetGame()">Tyhjennä</button>
                                 <button class="btn-horror" id="btn-run" disabled onclick="startAlgorithm()">Käynnistä</button>
                                 <button class="btn-horror btn-back" id="btn-back" onclick="showSelection()">Menu</button>
                             </div>
