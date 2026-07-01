@@ -128,6 +128,7 @@ function startGame(algorithm) {
 }
 
 function showSelection() {
+
     const selection = document.getElementById('view-selection');
     const game = document.getElementById('view-game');
 
@@ -141,6 +142,11 @@ function showSelection() {
         selection.style.display = 'flex';
         selection.classList.remove('fade-in');
         selection.classList.add('fade-in');
+    }, 2000);
+
+    // Tyhjennetään ruudukko jos menu buttonia painettu ja palautetaan painikkeet
+    setTimeout(() => {
+        resetGame();
     }, 2000);
 }
 
@@ -228,6 +234,10 @@ canvas.addEventListener('click', function(event) {
 
 // Tyhjennetään ruudukko tyhjennä buttonilla - kaikki solut takaisin 'empty' tilaan
 function resetGame() {
+    document.getElementById('btn-start-point').disabled = false;
+    document.getElementById('btn-end-point').disabled = false;
+    document.getElementById('btn-wall').disabled = false;
+    document.getElementById('speed-slider').disabled = false;
     grid = createEmptyGrid();
     drawGrid();
     updateRunButton();
@@ -249,9 +259,9 @@ function setMode(mode) {
 
     // Päivitetään ohjeteksti tilan mukaan
     const instruction = document.getElementById('game-instruction');
-    if (mode === 'start') instruction.textContent = 'Aseta lähtöpiste';
-    if (mode === 'end') instruction.textContent = 'Aseta maali';
-    if (mode === 'wall') instruction.textContent = 'Aseta seinät (valinnainen)';
+    if (mode === 'start') instruction.textContent = 'Aseta Vainoajan lähtöpiste';
+    if (mode === 'end') instruction.textContent = 'Aseta Vainoajan kohde';
+    if (mode === 'wall') instruction.textContent = 'Aseta esteitä (valinnainen)';
 }
 
 // Käynnistä buttonin disabled tila
@@ -430,7 +440,7 @@ function animatePath(path, startRow, startCol) {
     function nextPathStep() {
         if (pathIndex >= path.length) {
 
-           // Polku loppui (monsteri saavutti maalin)
+            // Polku loppui (monsteri saavutti maalin)
             unlockButtons();
             return;
         }
@@ -448,7 +458,6 @@ function animatePath(path, startRow, startCol) {
 
         // Merkitään solu pathiksi
         grid[row][col] = 'start';
-        unlockButtons();
         drawGrid();
 
         pathIndex++;
@@ -466,16 +475,18 @@ function lockButtons() {
     document.getElementById('btn-run').disabled = true;
     document.getElementById('btn-back').disabled = true;
     document.getElementById('speed-slider').disabled = true;
+    document.getElementById('btn-reset').disabled = true;
 }
 
 // Vapautetaan napit algoritmin ajon jälkeen
 function unlockButtons() {
-    document.getElementById('btn-start-point').disabled = false;
-    document.getElementById('btn-end-point').disabled = false;
-    document.getElementById('btn-wall').disabled = false;
-    document.getElementById('btn-run').disabled = false;
+    document.getElementById('btn-start-point').disabled = true;
+    document.getElementById('btn-end-point').disabled = true;
+    document.getElementById('btn-wall').disabled = true;
+    document.getElementById('btn-run').disabled = true;
     document.getElementById('btn-back').disabled = false;
-    document.getElementById('speed-slider').disabled = false;
+    document.getElementById('speed-slider').disabled = true;
+    document.getElementById('btn-reset').disabled = false;
 }
 
 // Käynnistetään valittu algoritmi
