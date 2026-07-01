@@ -241,6 +241,7 @@ function resetGame() {
     grid = createEmptyGrid();
     drawGrid();
     updateRunButton();
+    setMode('start');
 }
 
 // Vaihdetaan active tilaa sen mukaan mitä buttonia painettu pelinäkymässä
@@ -404,6 +405,13 @@ function animateBFS(steps, path, startRow, startCol) {
             grid[startRow][startCol] = 'start';
             drawGrid();
 
+            // Jos polku löytyi tai ei löytynyt, ilmoitetaan käyttäjälle
+            if (path.length > 0) {
+                document.getElementById('game-instruction').textContent = 'Kohde löydetty!';
+            } else {
+                document.getElementById('game-instruction').textContent = 'Kohdetta ei löytynyt tai kohdetta ei voida saavuttaa!';
+            }
+
             // Kutsutaan polkuanimaatiota ja annetaan sille lähtöpiste mukaan
             animatePath(path, startRow, startCol);
             return;
@@ -476,6 +484,11 @@ function lockButtons() {
     document.getElementById('btn-back').disabled = true;
     document.getElementById('speed-slider').disabled = true;
     document.getElementById('btn-reset').disabled = true;
+
+    // Poistetaan active-luokka kaikista painikkeista ajon ajaksi
+    document.getElementById('btn-start-point').classList.remove('active');
+    document.getElementById('btn-end-point').classList.remove('active');
+    document.getElementById('btn-wall').classList.remove('active');
 }
 
 // Vapautetaan napit algoritmin ajon jälkeen
@@ -508,14 +521,13 @@ function startAlgorithm() {
     // Lukitaan napit ajon ajaksi
     lockButtons();
 
+    // Vaihdetaan ohjeteksti kertomaan, että haku on käynnissä
+    document.getElementById('game-instruction').textContent = 'Etsitään kohdetta...';
+
     // Valitaan algoritmi sen mukaan kumpi valittiin alkuvalikosta
     const result = currentAlgorithm === 'bfs' ? bfs(startRow, startCol) : dfs(startRow, startCol);
 
-    if (result.found) {
-        animateBFS(result.steps, result.path, startRow, startCol);
-    } else {
-        animateBFS(result.steps, []);
-    }
+    animateBFS(result.steps, result.path, startRow, startCol);
 }
 
 // DFS algoritmi - toiminta sama idea kuin BFS mutta käyttää pinoa jonon sijaan
