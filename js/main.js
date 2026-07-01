@@ -15,10 +15,10 @@ let currentMode = 'start';
 
 // Ladataan spritet etukäteen jotta ne ovat valmiina kun canvas piirtää
 const startSprite = new Image();
-startSprite.src = '../images/monsteri.png'; // Monsteri-sprite
+startSprite.src = 'images/monsteri.png'; // Monsteri-sprite
 
 const endSprite = new Image();
-endSprite.src = '../images/pelaaja.png'; // Maali-sprite
+endSprite.src = 'images/pelaaja.png'; // Maali-sprite
 
 // Muistaa kumpi algoritmi valittiin alkuvalikosta
 let currentAlgorithm = 'bfs';
