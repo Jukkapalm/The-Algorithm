@@ -384,8 +384,18 @@ function animateBFS(steps, path, startRow, startCol) {
     function nextStep() {
         if (stepIndex >= steps.length) {
 
-            // Kaikki askeleet animoitu, piirretään path
-            animatePath(path);
+            // Puhdistetaan viimeinen hakuruutu visited-tilaan, jos hakuja tehtiin
+            if (steps.length > 0) {
+                const lastStep = steps[steps.length - 1];
+                grid[lastStep.row][lastStep.col] = 'visited';
+            }
+
+            // Asetetaan monsteri takaisin lähtöruutuun ennen polun alkua
+            grid[startRow][startCol] = 'start';
+            drawGrid();
+
+            // Kutsutaan polkuanimaatiota ja annetaan sille lähtöpiste mukaan
+            animatePath(path, startRow, startCol);
             return;
         }
 
@@ -420,16 +430,24 @@ function animatePath(path, startRow, startCol) {
     function nextPathStep() {
         if (pathIndex >= path.length) {
 
-            // Path animoitu, vapautetaan napit
-            grid[startRow][startCol] = 'path';
-            drawGrid();
+           // Polku loppui (monsteri saavutti maalin)
+            unlockButtons();
             return;
         }
 
         const { row, col } = path[pathIndex];
 
+        // Korvataan edellinen ruutu polku-värillä
+        if (pathIndex > 0) {
+            const prev = path[pathIndex - 1];
+            grid[prev.row][prev.col] = 'path';
+        } else {
+            // Ensimmäisessä askelessa muutetaan lähtöruutu poluksi, kun monsteri liikkuu eteenpäin
+            grid[startRow][startCol] = 'path';
+        }
+
         // Merkitään solu pathiksi
-        grid[row][col] = 'path';
+        grid[row][col] = 'start';
         unlockButtons();
         drawGrid();
 
