@@ -371,7 +371,7 @@ function bfs(startRow, startCol) {
 }
 
 // Animoi BFS askel kerrallaan käyttäen steps-listaa
-function animateBFS(steps, path) {
+function animateBFS(steps, path, startRow, startCol) {
 
     // Lasketaan viive nopeussäätimen arvosta
     // Arvo 1 = hidas (500ms), arvo 10 = nopea (50ms)
@@ -396,14 +396,7 @@ function animateBFS(steps, path) {
             const prev = steps[stepIndex - 1];
             grid[prev.row][prev.col] = 'visited';
         } else {
-            // Ensimmäinen askel - merkitään lähtöpiste visited-tilaan
-            for (let r = 0; r < GRID_SIZE; r++) {
-                for (let c = 0; c < GRID_SIZE; c++) {
-                    if (grid[r][c] === 'start') {
-                        grid[r][c] = 'visited';
-                    }
-                }
-            }
+            grid[startRow][startCol] = 'visited';
         }
 
         // Siirretään monsteri uuteen soluun
@@ -418,7 +411,7 @@ function animateBFS(steps, path) {
 }
 
 // Animoidaan löydetty path askel kerrallaan
-function animatePath(path) {
+function animatePath(path, startRow, startCol) {
     const speed = document.getElementById('speed-slider').value;
     const delay = 550 - (speed * 50);
 
@@ -428,7 +421,8 @@ function animatePath(path) {
         if (pathIndex >= path.length) {
 
             // Path animoitu, vapautetaan napit
-            unlockButtons();
+            grid[startRow][startCol] = 'path';
+            drawGrid();
             return;
         }
 
@@ -436,6 +430,7 @@ function animatePath(path) {
 
         // Merkitään solu pathiksi
         grid[row][col] = 'path';
+        unlockButtons();
         drawGrid();
 
         pathIndex++;
@@ -486,12 +481,9 @@ function startAlgorithm() {
     const result = currentAlgorithm === 'bfs' ? bfs(startRow, startCol) : dfs(startRow, startCol);
 
     if (result.found) {
-        animateBFS(result.steps, result.path);
+        animateBFS(result.steps, result.path, startRow, startCol);
     } else {
-
-        // Maalia ei löydetty - animoidaan visited solut ja ilmoitetaan käyttäjälle
         animateBFS(result.steps, []);
-        // Tähän tulee myöhemmin ilmoitus 
     }
 }
 
