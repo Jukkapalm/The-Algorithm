@@ -465,6 +465,7 @@ function lockButtons() {
     document.getElementById('btn-wall').disabled = true;
     document.getElementById('btn-run').disabled = true;
     document.getElementById('btn-back').disabled = true;
+    document.getElementById('speed-slider').disabled = true;
 }
 
 // Vapautetaan napit algoritmin ajon jälkeen
@@ -474,6 +475,7 @@ function unlockButtons() {
     document.getElementById('btn-wall').disabled = false;
     document.getElementById('btn-run').disabled = false;
     document.getElementById('btn-back').disabled = false;
+    document.getElementById('speed-slider').disabled = false;
 }
 
 // Käynnistetään valittu algoritmi
