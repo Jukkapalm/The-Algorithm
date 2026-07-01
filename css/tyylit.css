@@ -147,6 +147,11 @@ input[type="range"] {
     cursor: not-allowed;
 }
 
+input[type="range"]:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
 @keyframes fadeInFast {
     from { opacity: 0; }
     to { opacity: 1; }
